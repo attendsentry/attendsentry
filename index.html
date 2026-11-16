@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AttendSentry | FEU Roosevelt</title>
+<style>
+:root{--green:#006b3f;--dark:#004d2d;--soft:#eaf5ee;--gold:#f5c842;--goldsoft:#fff6d6;--ink:#18352a;--muted:#6d7c74;--page:#f5f7f4;--line:#e3eae4;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--page)}
+button,input,select{font:inherit}button{border:0;border-radius:9px;padding:11px 15px;font-size:13px;font-weight:700;cursor:pointer}
+.btn-primary{background:var(--green);color:#fff}.btn-primary:hover{background:var(--dark)}.btn-gold{background:var(--gold);color:var(--dark)}.btn-light{background:#f1f5f1;color:var(--ink)}button:disabled{opacity:.5;cursor:not-allowed}
+input,select{width:100%;border:1px solid #d3ded5;border-radius:9px;padding:12px;font-size:14px;outline-color:var(--green);background:#fff;color:var(--ink)}
+.app{min-height:100vh;display:flex}.sidebar{width:245px;flex-shrink:0;background:var(--dark);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:26px}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px}.brand img{width:54px;height:54px;object-fit:contain;background:white;border-radius:50%;padding:3px}.brand h1{font-size:17px;margin:0;letter-spacing:.5px}.brand p{margin:4px 0 0;font-size:11px;color:#d7e9dc}
+.nav-label{padding:0 12px;color:#a8c9b5;font-size:10px;font-weight:700;letter-spacing:1.4px;margin-bottom:9px}.nav-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;padding:12px 13px;margin:4px 0;border-radius:10px;color:#e3f0e7;font-size:14px;cursor:pointer}.nav-item.active{background:var(--gold);color:var(--dark);font-weight:700}.nav-icon{width:22px;text-align:center;font-size:17px}.sidebar-note{margin-top:auto;padding:15px;border:1px solid #36775a;border-radius:12px;color:#d6e9dc;font-size:12px;line-height:1.5}.sidebar-note strong{color:var(--gold);display:block;margin-bottom:5px}
+.main{min-width:0;flex:1}.topbar{background:#fff;border-bottom:1px solid var(--line);min-height:78px;padding:17px 30px;display:flex;justify-content:space-between;align-items:center;gap:15px}.eyebrow{color:var(--green);text-transform:uppercase;font-size:10px;letter-spacing:1.5px;font-weight:800}.topbar h2{margin:4px 0 0;font-size:21px}.teacher{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:650}.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--goldsoft);color:var(--dark);border:1px solid #f0dc89;font-weight:800}
+.content{max-width:1350px;padding:28px 30px 40px;margin:auto}.welcome{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:18px;background:var(--green);color:white;padding:25px 28px;border-radius:18px;margin-bottom:22px;box-shadow:0 8px 22px #004d2d18}.welcome h3{font-size:23px;margin:0 0 8px}.welcome p{margin:0;color:#dcefe3;font-size:13px;line-height:1.6}.welcome-mark{width:80px;height:80px;object-fit:contain}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px 20px;display:flex;align-items:center;gap:14px}.stat-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:13px;font-size:21px}.totalicon{background:var(--goldsoft)}.online{background:var(--soft)}.offline{background:#fff0ee}.stat p{margin:0 0 5px;color:var(--muted);font-size:12px}.stat h3{margin:0;font-size:28px}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;margin-bottom:20px;overflow:hidden}.panel-head{padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0 0 5px;font-size:17px}.panel-head p{margin:0;color:var(--muted);font-size:12px}.time-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.time-form input{min-width:180px;width:auto;flex:1}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:14px 20px;border-bottom:1px solid #edf1ed;font-size:13px}th{color:#75847b;background:#fbfcfa;text-transform:uppercase;font-size:10px;letter-spacing:.8px}tbody tr:last-child td{border-bottom:0}.student{display:flex;align-items:center;gap:10px;font-weight:700}.student-avatar{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--soft);color:var(--green);font-weight:800}.status{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:30px;font-size:11px;font-weight:800}.status:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.status.active{color:#147847;background:#e8f7ed}.status.inactive{color:var(--red);background:#fff0ee}.empty{padding:30px;text-align:center;color:var(--muted);font-size:13px}.footer{color:#7a8980;text-align:center;font-size:11px;padding:10px}.message{margin:12px 22px;font-size:12px;color:var(--green);min-height:15px;line-height:1.5}.note{margin:0 22px 18px;color:var(--muted);font-size:11px;line-height:1.5}.auth-wrap{max-width:460px;margin:7vh auto;padding:0 18px}.auth-card{background:white;border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:0 8px 24px #004d2d0d}.auth-brand{display:flex;align-items:center;gap:14px;margin-bottom:22px}.auth-brand img{width:60px;height:60px;object-fit:contain}.auth-brand h1{font-size:19px;margin:0;color:var(--dark)}.auth-brand p{margin:5px 0 0;color:var(--muted);font-size:12px}.auth-card h2{font-size:22px;margin:0 0 8px}.sub{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 20px}.field{margin:13px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:7px}.auth-actions{display:flex;gap:9px;margin-top:17px}.auth-actions button{flex:1}.hidden{display:none!important}.pill{font-size:11px;padding:6px 9px;border-radius:30px;background:var(--goldsoft);color:var(--dark);font-weight:800}.signed-user{display:flex;align-items:center;gap:10px}.error{color:var(--red)}
+.class-form{padding:20px 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.class-form .field{margin:0}.class-form .wide{grid-column:1/-1}.class-form label{display:block;font-size:12px;font-weight:700;margin-bottom:7px}.class-actions{display:flex;justify-content:flex-end;gap:8px;grid-column:1/-1}.class-list{padding:18px 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.class-card{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff}.class-card h4{margin:0 0 6px;font-size:15px}.class-meta{font-size:11px;color:var(--muted);line-height:1.7}.member-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid #edf1ed;font-size:12px}.member-add{display:flex;gap:7px;margin-top:12px}.member-add input{min-width:0;padding:9px;font-size:12px}.member-add button,.small-btn{padding:8px 10px;font-size:11px}.class-message{font-size:12px;min-height:16px;margin-top:9px;color:var(--green)}
+@media(max-width:700px){.class-form,.class-list{grid-template-columns:1fr}.class-form .wide,.class-actions{grid-column:auto}}
+@media(max-width:900px){.sidebar{width:76px;padding:20px 10px;align-items:center}.brand{padding:0}.brand img{width:48px;height:48px}.brand-text,.nav-label,.nav-item span:not(.nav-icon),.sidebar-note{display:none}.nav-item{justify-content:center;padding:12px;width:50px}.nav-icon{width:auto}.content{padding:22px 18px 30px}.topbar{padding:16px 18px}}@media(max-width:620px){.stats{grid-template-columns:1fr;gap:10px}.welcome{padding:21px}.welcome h3{font-size:19px}.welcome-mark{width:55px;height:55px}.teacher span{display:none}.panel-head{align-items:flex-start;flex-direction:column}.time-form{width:100%}.time-form input{width:100%}.auth-card{padding:22px}}
+</style>
+</head>
+<body>
+<section id="authScreen" class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-brand"><img src="assets/feu-roosevelt-seal.png" alt="FEU Roosevelt seal"><div><h1>ATTENDSENTRY</h1><p>FEU Roosevelt • Class Monitoring</p></div></div>
+    <h2 id="authTitle">Welcome back</h2><p class="sub" id="authSubtitle">Sign in to access your AttendSentry account.</p>
+    <div id="studentFields" class="hidden">
+      <div class="field"><label for="firstName">First name *</label><input id="firstName" autocomplete="given-name" placeholder="First name"></div>
+      <div class="field"><label for="middleName">Middle name (optional)</label><input id="middleName" autocomplete="additional-name" placeholder="Middle name"></div>
+      <div class="field"><label for="lastName">Last name *</label><input id="lastName" autocomplete="family-name" placeholder="Last name"></div>
+      <div class="field"><label for="studentNumber">Student number *</label><input id="studentNumber" placeholder="Enter your FEU student number"></div>
+      <div class="field"><label for="mobileNumber">Mobile number *</label><input id="mobileNumber" type="tel" autocomplete="tel" placeholder="09XXXXXXXXX"></div>
+      <div class="field"><label for="program">Program</label><input id="program" value="BSIT" readonly></div>
+      <div class="field"><label for="yearLevel">Year level *</label><select id="yearLevel"><option value="">Select year level</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+      <div class="field"><label for="section">Section *</label><input id="section" placeholder="e.g. BSIT 1A"></div>
+      <div class="field"><label for="deliveryMode">Learning modality *</label><select id="deliveryMode"><option value="">Select modality</option><option>ODL</option><option>Hybrid</option><option>Offshore</option></select></div>
+    </div>
+    <div class="field"><label for="email">FEU email address *</label><input id="email" type="email" autocomplete="email" placeholder="Enter your FEU email"></div>
+    <div class="field"><label for="password">Password *</label><input id="password" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
+    <div class="field" id="confirmPasswordField" style="display:none"><label for="confirmPassword">Confirm Password *</label><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Re-enter your password"></div>
+    <div id="authMessage" class="message" style="margin:12px 0"></div>
+    <div class="auth-actions"><button id="signInBtn" class="btn-primary">Sign In</button><button id="signUpBtn" class="btn-gold">Create Student Account</button></div>
+    <p class="sub" style="margin:18px 0 0;font-size:11px">Student accounts are created with the student role. Teacher access must be assigned by the project administrator in Firebase.</p>
+  </div>
+</section>
+<div id="appScreen" class="app hidden">
+<aside class="sidebar"><div class="brand"><img src="assets/feu-roosevelt-seal.png" alt="FEU Roosevelt seal"><div class="brand-text"><h1>ATTENDSENTRY</h1><p>FEU Roosevelt</p></div></div><div><div class="nav-label">WORKSPACE</div><button type="button" class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span><span>Dashboard</span></button><button type="button" class="nav-item" data-view="attendance"><span class="nav-icon">◷</span><span>Attendance</span></button><button type="button" class="nav-item" data-view="students"><span class="nav-icon">♙</span><span id="studentsNavLabel">Students</span></button></div><div class="sidebar-note"><strong>FUTURE-READY LEARNING</strong>A simple class activity monitoring system.</div></aside>
+<main class="main"><div class="topbar"><div><div class="eyebrow">FEU Roosevelt • Student Services</div><h2>Class Monitoring Dashboard</h2></div><div class="signed-user"><span id="rolePill" class="pill">Student</span><div class="avatar" id="userAvatar">S</div><span id="userLabel">Account</span><button id="signOutBtn" class="btn-light">Sign Out</button></div></div>
+<div class="content"><section id="welcomePanel" class="welcome"><div><h3>Welcome to AttendSentry</h3><p>Record time-in and time-out, view attendance duration, and check recent activity.<br>One dashboard. A clearer view of class participation.</p></div><img class="welcome-mark" src="assets/feu-roosevelt-seal.png" alt="FEU Roosevelt seal"></section>
+<section id="stats" class="stats"><div class="stat"><div class="stat-icon totalicon">♙</div><div><p>Total Sessions</p><h3 id="total">0</h3></div></div><div class="stat"><div class="stat-icon online">●</div><div><p>Active Sessions</p><h3 id="activeCount">0</h3></div></div><div class="stat"><div class="stat-icon offline">◷</div><div><p>Inactive Sessions</p><h3 id="inactiveCount">0</h3></div></div></section>
+<section id="studentPanel" class="panel"><div class="panel-head"><div><h3>My Attendance</h3><p>Start a session when you join class and end it when you finish.</p></div><div class="time-form"><button id="timeInBtn" class="btn-primary">Time In</button><button id="timeOutBtn" class="btn-gold">Time Out</button></div></div><p id="selectedSubjectLabel" class="message" aria-live="polite">Select a subject in My Classes before you Time In.</p><p id="studentMessage" class="message" aria-live="polite"></p><p class="note">Active means this AttendSentry page has checked in recently. It does not confirm attention or activity in Zoom, Google Meet, or other apps.</p></section>
+<section id="teacherPanel" class="panel hidden"><div class="panel-head"><div><h3>Student Activity</h3><p>Live attendance records from students using their own devices.</p></div><button id="refreshBtn" class="btn-light">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Subject</th><th>Time In</th><th>Duration</th><th>Last Activity</th><th>Status</th></tr></thead><tbody id="studentTable"></tbody></table><div class="empty" id="emptyState">No attendance records yet.</div></div></section>
+<section id="classManagementPanel" class="panel hidden">
+<div class="panel-head"><div><h3>Class Management</h3><p>Create your BSIT classes and add only officially enrolled students with existing AttendSentry accounts.</p></div><span class="pill">Teacher workspace</span></div>
+<form id="createClassForm" class="class-form">
+<div class="field wide"><label for="classSubject">BSIT Subject *</label><select id="classSubject" required><option value="">Select a subject</option></select></div>
+<div class="field"><label for="className">Class name *</label><input id="className" required placeholder="e.g. Systems Integration - Section A"></div>
+<div class="field"><label for="schoolYear">School year *</label><input id="schoolYear" required value="2026-2027" placeholder="2026-2027"></div>
+<div class="field"><label for="classSemester">Semester *</label><select id="classSemester" required><option value="">Select semester</option><option value="1">1st Semester</option><option value="2">2nd Semester</option><option value="summer">Summer</option></select></div>
+<div class="class-actions"><button type="submit" class="btn-primary">Create Class</button></div><div id="classFormMessage" class="class-message wide" aria-live="polite"></div>
+</form>
+<div class="panel-head"><div><h3>My Classes</h3><p>Only classes created by your teacher account appear here.</p></div></div>
+<div id="myClassesList" class="class-list"><div class="empty">Loading classes…</div></div>
+</section>
+<section id="studentHistoryPanel" class="panel"><div class="panel-head"><div><h3>My Recent Sessions</h3><p>Your attendance history</p></div></div><div class="table-wrap"><table><thead><tr><th>Subject</th><th>Time In</th><th>Time Out</th><th>Duration</th><th>Status</th></tr></thead><tbody id="myTable"></tbody></table><div class="empty" id="myEmpty">No attendance records yet.</div></div></section>
+<section id="studentClassesPanel" class="panel hidden"><div class="panel-head"><div><h3>My Enrolled Classes</h3><p>Classes assigned to your student account by your teacher.</p></div><button id="refreshMyClassesBtn" class="btn-light">Refresh</button></div><div id="studentClassesList" class="class-list"><div class="empty">Loading your classes…</div></div></section>
+<section id="subjectDashboardPanel" class="panel hidden"><div class="panel-head"><div><button type="button" id="backToClassesBtn" class="btn-light" style="margin-bottom:12px">← Back to My Classes</button><h3 id="subjectDashboardTitle">Subject</h3><p id="subjectDashboardMeta"></p></div><span class="pill">Enrolled</span></div><div style="padding:22px"><div id="subjectSessionStatus" style="font-size:20px;font-weight:800;margin-bottom:8px">Not Timed In</div><p id="subjectSessionDetail" class="class-meta" style="margin-bottom:18px">Select Time In when you join this class.</p><div class="time-form"><button id="subjectTimeInBtn" class="btn-primary">Time In</button><button id="subjectTimeOutBtn" class="btn-gold">Time Out</button></div><p id="subjectActionMessage" class="message" aria-live="polite"></p><p class="note" style="margin-left:0">Active means this AttendSentry page has checked in recently. It does not confirm attention or activity in Zoom, Google Meet, or other apps.</p></div></section>
+<div class="footer">ATTENDSENTRY • FEU Roosevelt-inspired design</div></div></main></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, addDoc, collection, collectionGroup, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, limit, getDocs, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdp7Zz1wF7tmX6_h1SgmKA_WiL9mqUfXA",
+  authDomain: "classwatch-feu.firebaseapp.com",
+  projectId: "classwatch-feu",
+  storageBucket: "classwatch-feu.firebasestorage.app",
+  messagingSenderId: "74850424885",
+  appId: "1:74850424885:web:f7c1317825f04d0b6ab97c",
+  measurementId: "G-NLPZP6YMZP"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+function setTeacherView(view){
+  const teacher=userProfile?.role==="teacher";
+  const subjectPage=$("subjectDashboardPanel");
+  document.querySelectorAll(".nav-item").forEach(button=>button.classList.toggle("active",button.dataset.view===view||(view==="subject"&&button.dataset.view==="students")));
+  $("welcomePanel").classList.toggle("hidden",view!=="dashboard");
+  $("stats").classList.toggle("hidden",!teacher||view!=="dashboard");
+  $("teacherPanel").classList.toggle("hidden",!teacher||view!=="attendance");
+  $("classManagementPanel").classList.toggle("hidden",!teacher||view!=="students");
+  $("studentPanel").classList.add("hidden");
+  $("studentHistoryPanel").classList.toggle("hidden",teacher||view!=="attendance");
+  $("studentClassesPanel").classList.toggle("hidden",teacher||view!=="students");
+  subjectPage.classList.toggle("hidden",teacher||view!=="subject");
+}
+
+document.querySelectorAll(".nav-item").forEach(button => {
+  button.addEventListener("click", () => setTeacherView(button.dataset.view));
+});
+
+let currentUser = null, userProfile = null, stopAttendanceListener = null, heartbeatTimer = null, activeSessionId = null, sessionsCache = [], signupMode = false, selectedClass = null, signupInProgress = false;
+let stopClassesListener = null, stopMyClassesListener = null, myClassesRenderVersion = 0;
+const teacherMemberListeners = new Map();
+const BSIT_SUBJECTS = [{"code": "FEUR111", "name": "An FEUR Journey 1 - Social Skills, Technology and Information Literacy", "year": 1, "semester": 1}, {"code": "GE111", "name": "Understanding the Self", "year": 1, "semester": 1}, {"code": "GE121", "name": "The Contemporary World", "year": 1, "semester": 1}, {"code": "IT111", "name": "Introduction to Computing", "year": 1, "semester": 1}, {"code": "IT121", "name": "Fundamentals of Programming", "year": 1, "semester": 1}, {"code": "NSTP111", "name": "National Service Training Program 1", "year": 1, "semester": 1}, {"code": "PE111", "name": "Physical Fitness", "year": 1, "semester": 1}, {"code": "FEUR122", "name": "An FEUR Journey 2 - Critical Thinking, Creativity and Flexibility", "year": 1, "semester": 2}, {"code": "GE132", "name": "Mathematics in the Modern World", "year": 1, "semester": 2}, {"code": "GE142", "name": "Purposive Communication", "year": 1, "semester": 2}, {"code": "IT132", "name": "Discrete Mathematics", "year": 1, "semester": 2}, {"code": "IT142", "name": "Intermediate Programming", "year": 1, "semester": 2}, {"code": "NSTP122", "name": "National Service Training Program 2", "year": 1, "semester": 2}, {"code": "PE122", "name": "Rhythmic Activities", "year": 1, "semester": 2}, {"code": "GE251", "name": "Art Appreciation", "year": 2, "semester": 1}, {"code": "GE261", "name": "Science, Technology and Society", "year": 2, "semester": 1}, {"code": "IT251", "name": "Data Structures and Algorithms", "year": 2, "semester": 1}, {"code": "IT261", "name": "Information Management", "year": 2, "semester": 1}, {"code": "IT271", "name": "Introduction to Human Computer Interaction", "year": 2, "semester": 1}, {"code": "ITE211", "name": "Elective 1", "year": 2, "semester": 1}, {"code": "PE231", "name": "Individual and Dual Sports Activities", "year": 2, "semester": 1}, {"code": "GE272", "name": "Ethics", "year": 2, "semester": 2}, {"code": "GE282", "name": "Mga Babasahin Hinggil sa Kasaysayan ng Pilipinas", "year": 2, "semester": 2}, {"code": "GE292", "name": "Ang Buhay at Mga Akda ni Rizal", "year": 2, "semester": 2}, {"code": "IT2102", "name": "Interactive Programming Technologies 1", "year": 2, "semester": 2}, {"code": "IT2112", "name": "Networking 1", "year": 2, "semester": 2}, {"code": "IT282", "name": "Fundamentals of Database Management System", "year": 2, "semester": 2}, {"code": "IT292", "name": "Applications, Development and Emerging Technologies", "year": 2, "semester": 2}, {"code": "PE242", "name": "Team Sports", "year": 2, "semester": 2}, {"code": "GE3101", "name": "The Entrepreneurial Mind", "year": 3, "semester": 1}, {"code": "GE3111", "name": "Living in the IT Era", "year": 3, "semester": 1}, {"code": "GE3121", "name": "Advance Oral Communication", "year": 3, "semester": 1}, {"code": "IT3121", "name": "Networking 2", "year": 3, "semester": 1}, {"code": "IT3131", "name": "Quantitative Methods (Including Modeling and Simulation)", "year": 3, "semester": 1}, {"code": "IT3141", "name": "Systems Integration and Architecture 1", "year": 3, "semester": 1}, {"code": "ITE321", "name": "Elective 2 : Artificial Intelligence and Machine Learning", "year": 3, "semester": 1}, {"code": "IT3152", "name": "Incident Response and Forensic Inspection", "year": 3, "semester": 2}, {"code": "IT3162", "name": "Social and Professional Issues", "year": 3, "semester": 2}, {"code": "IT3172", "name": "Ethical Hacking and Penetration Testing", "year": 3, "semester": 2}, {"code": "IT3182", "name": "Cryptology and Modern Network Security", "year": 3, "semester": 2}, {"code": "IT3192", "name": "Information Assurance and Security 1", "year": 3, "semester": 2}, {"code": "IT3202", "name": "Capstone Project and Research 1", "year": 3, "semester": 2}, {"code": "ITE332", "name": "Elective 3", "year": 3, "semester": 2}, {"code": "FEUR431", "name": "Career Development, Collaboration & Teamwork", "year": 4, "semester": 1}, {"code": "IT4211", "name": "Systems Administration and Maintenance", "year": 4, "semester": 1}, {"code": "IT4221", "name": "Information Assurance and Security 2", "year": 4, "semester": 1}, {"code": "IT4231", "name": "Software Testing and Debugging", "year": 4, "semester": 1}, {"code": "IT4241", "name": "Capstone Project and Research 2", "year": 4, "semester": 1}, {"code": "ITE441", "name": "Elective 4", "year": 4, "semester": 1}, {"code": "IT4262", "name": "IT Practicum (600 Hours)", "year": 4, "semester": 2}];
+
+function authMsg(text, isError=false){ $("authMessage").textContent=text; $("authMessage").className="message"+(isError?" error":""); }
+function studentMsg(text, isError=false){ $("studentMessage").textContent=text; $("studentMessage").className="message"+(isError?" error":""); }
+function setAuthMode(signup){
+  signupMode=signup;
+  $("studentFields").classList.toggle("hidden",!signup);
+  $("confirmPasswordField").classList.toggle("hidden",!signup); $("confirmPasswordField").style.display=signup?"block":"none";
+  $("authTitle").textContent=signup?"Create your student account":"Welcome back";
+  $("authSubtitle").textContent=signup?"Complete your basic student information and use your FEU email.":"Sign in to access your AttendSentry account.";
+  $("signInBtn").classList.toggle("hidden",signup);
+  $("signUpBtn").textContent=signup?"Create Account":"Create Student Account";
+  $("password").autocomplete=signup?"new-password":"current-password";
+  authMsg("");
+}
+$("signUpBtn").addEventListener("click",async()=>{
+  if(!signupMode){setAuthMode(true);return;}
+  const firstName=$("firstName").value.trim(), middleName=$("middleName").value.trim();
+  const lastName=$("lastName").value.trim(), studentNumber=$("studentNumber").value.trim();
+  const mobileNumber=$("mobileNumber").value.trim(), yearLevel=$("yearLevel").value;
+  const section=$("section").value.trim(), deliveryMode=$("deliveryMode").value;
+  const email=$("email").value.trim(), password=$("password").value;
+  const confirmPassword=$("confirmPassword").value;
+  const displayName=[firstName,middleName,lastName].filter(Boolean).join(" ");
+  if(!firstName||!lastName||!studentNumber||!mobileNumber||!yearLevel||!section||!deliveryMode||!email||!password){
+    authMsg("Please complete all required fields.",true);return;
+  }
+  if(password.length<6){authMsg("Password must have at least 6 characters.",true);return;}
+  if(password!==confirmPassword){authMsg("Passwords do not match. Please check your password and try again.",true);$("confirmPassword").focus();return;}
+  if(!/^09\d{9}$/.test(mobileNumber.replace(/[\s-]/g,""))){
+    authMsg("Enter a valid Philippine mobile number (09XXXXXXXXX).",true);return;
+  }
+  signupInProgress=true;
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,password);
+    await updateProfile(cred.user,{displayName});
+    await setDoc(doc(db,"users",cred.user.uid),{
+      displayName,firstName,middleName,lastName,studentNumber,mobileNumber,
+      program:"BSIT",yearLevel,section,deliveryMode,email,role:"student",
+      createdAt:serverTimestamp()
+    });
+    await signOut(auth);
+    setAuthMode(false);
+    authMsg("Account created successfully! Please sign in using your email and password.");
+    $("confirmPassword").value="";
+    $("password").value="";
+  }catch(e){authMsg(readableError(e),true);}
+  finally{signupInProgress=false;}
+});
+$("signInBtn").addEventListener("click",async()=>{const email=$("email").value.trim(),password=$("password").value;if(!email||!password){authMsg("Enter your email and password.",true);return;}try{await signInWithEmailAndPassword(auth,email,password);}catch(e){authMsg(readableError(e),true);}});
+$("signOutBtn").addEventListener("click",async()=>{
+  const button=$("signOutBtn");
+  button.disabled=true;
+  try {
+    await endHeartbeat();
+    await signOut(auth);
+    // The auth-state listener will switch back to the clean sign-in screen.
+  } catch(e) {
+    authMsg(readableError(e),true);
+  } finally {
+    button.disabled=false;
+  }
+});
+function readableError(e){const map={"auth/email-already-in-use":"This email already has an account. Please sign in.","auth/invalid-email":"Please enter a valid email address.","auth/weak-password":"Choose a password with at least 6 characters.","auth/invalid-credential":"Email or password is incorrect.","auth/too-many-requests":"Too many attempts. Please wait and try again.","permission-denied":"Firebase access is blocked by Firestore Rules. Please check the setup instructions."};return map[e.code]||("Something went wrong: "+(e.message||"Please try again."));}
+function stamp(ts){return ts&&typeof ts.toDate==="function"?ts.toDate():null;}
+function formatTime(ts){const d=stamp(ts);return d?d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—";}
+function formatDateTime(ts){const d=stamp(ts);return d?d.toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"—";}
+function millis(ts){const d=stamp(ts);return d?d.getTime():0;}
+function duration(ms){const s=Math.max(0,Math.floor(ms/1000));return Math.floor(s/3600)+"h "+Math.floor((s%3600)/60)+"m "+(s%60)+"s";}
+function isActive(s){return !s.timeOutAt && millis(s.lastSeenAt)>0 && Date.now()-millis(s.lastSeenAt)<65000;}
+function stopListeners(){if(stopClassesListener){stopClassesListener();stopClassesListener=null;}if(stopMyClassesListener){stopMyClassesListener();stopMyClassesListener=null;}teacherMemberListeners.forEach(unsubscribe=>unsubscribe());teacherMemberListeners.clear();myClassesRenderVersion++;if(stopAttendanceListener){stopAttendanceListener();stopAttendanceListener=null;} if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;} activeSessionId=null;}
+
+function classMsg(message,isError=false){const el=$("classFormMessage");if(el){el.textContent=message;el.classList.toggle("error",isError);}}
+function initializeSubjectOptions(){const select=$("classSubject");if(!select||select.options.length>1)return;BSIT_SUBJECTS.forEach(subject=>{const option=document.createElement("option");option.value=subject.code;option.textContent=`${subject.code} — ${subject.name}`;option.dataset.name=subject.name;option.dataset.year=subject.year;option.dataset.semester=subject.semester;select.append(option);});}
+function watchTeacherClasses(){if(stopClassesListener){stopClassesListener();stopClassesListener=null;}const q=query(collection(db,"classes"),where("teacherUid","==",currentUser.uid));stopClassesListener=onSnapshot(q,snap=>{const classes=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.className||"").localeCompare(b.className||""));renderTeacherClasses(classes);},e=>{const list=$("myClassesList");list.textContent=readableError(e);});}
+function renderTeacherClasses(classes){teacherMemberListeners.forEach(unsubscribe=>unsubscribe());teacherMemberListeners.clear();const list=$("myClassesList");list.replaceChildren();if(!classes.length){const empty=document.createElement("div");empty.className="empty";empty.textContent="No classes yet. Create your first class above.";list.append(empty);return;}classes.forEach(c=>{const card=document.createElement("article");card.className="class-card";const title=document.createElement("h4");title.textContent=c.className||c.subjectName;const meta=document.createElement("div");meta.className="class-meta";meta.textContent=`${c.subjectCode} • ${c.subjectName}\n${c.schoolYear} • ${c.semesterLabel}`;meta.style.whiteSpace="pre-line";card.append(title,meta);const memberHeading=document.createElement("p");memberHeading.style.cssText="font-size:12px;font-weight:800;margin:14px 0 5px";memberHeading.textContent="Official class list";card.append(memberHeading);const members=document.createElement("div");members.className="member-list";members.textContent="Loading students…";card.append(members);const add=document.createElement("div");add.className="member-add";const input=document.createElement("input");input.type="text";input.inputMode="text";input.placeholder="FEU student number";input.setAttribute("aria-label","FEU student number");const button=document.createElement("button");button.type="button";button.className="btn-gold";button.textContent="Add Student";button.addEventListener("click",()=>addStudentToClass(c,input,members));add.append(input,button);card.append(add);const msg=document.createElement("div");msg.className="class-message";card.append(msg);const deleteButton=document.createElement("button");deleteButton.type="button";deleteButton.className="btn-light small-btn";deleteButton.style.cssText="margin-top:10px;color:#b42318;border:1px solid #f1c7c3";deleteButton.textContent="Delete Class";deleteButton.addEventListener("click",()=>deleteTeacherClass(c,deleteButton,msg));card.append(deleteButton);loadClassMembers(c.id,members,msg,c.className||c.subjectName||c.id);list.append(card);});}
+function loadClassMembers(classId,container,message,classLabel=classId){
+  if(teacherMemberListeners.has(classId)){
+    teacherMemberListeners.get(classId)();
+    teacherMemberListeners.delete(classId);
+  }
+  const unsubscribe=onSnapshot(collection(db,"classes",classId,"members"),snap=>{
+    container.replaceChildren();
+    if(snap.empty){container.textContent="No students added yet.";return;}
+    snap.forEach(memberDoc=>{
+      const m=memberDoc.data();
+      const row=document.createElement("div");
+      row.className="member-row";
+      const label=document.createElement("span");
+      label.textContent=`${m.displayName||m.email||"Student"} (${m.studentNumber||"No student number"})`;
+      const remove=document.createElement("button");
+      remove.type="button";
+      remove.className="btn-light small-btn";
+      remove.textContent="Remove";
+      remove.addEventListener("click",async()=>{
+        const studentLabel=`${m.displayName||m.email||"Student"}${m.studentNumber?` (${m.studentNumber})`:""}`;
+        if(!confirm(`Remove ${studentLabel} from ${classLabel}?\n\nOnly this class membership will be removed. Previous attendance records will remain.`))return;
+        remove.disabled=true;
+        try{
+          await deleteDoc(doc(db,"classes",classId,"members",memberDoc.id));
+          message.textContent=`${studentLabel} was removed from ${classLabel}. Previous attendance records were retained.`;
+          message.classList.remove("error");
+        }catch(e){
+          message.textContent=readableError(e);
+          message.classList.add("error");
+          remove.disabled=false;
+        }
+      });
+      row.append(label,remove);
+      container.append(row);
+    });
+  },e=>{container.textContent=readableError(e);});
+  teacherMemberListeners.set(classId,unsubscribe);
+}
+async function deleteTeacherClass(classInfo,button,message){const classLabel=classInfo.className||classInfo.subjectName||"this class";if(!confirm(`Delete the class "${classLabel}"?\n\nAll student memberships in this class will be removed. Attendance history will be kept. This action cannot be undone.`))return;button.disabled=true;message.textContent="Deleting class and its memberships…";message.classList.remove("error");try{const memberSnap=await getDocs(collection(db,"classes",classInfo.id,"members"));const refs=memberSnap.docs.map(d=>d.ref);for(let i=0;i<refs.length;i+=450){const batch=writeBatch(db);refs.slice(i,i+450).forEach(ref=>batch.delete(ref));await batch.commit();}await deleteDoc(doc(db,"classes",classInfo.id));message.textContent=`"${classLabel}" was deleted. Attendance history was retained.`;}catch(e){message.textContent=readableError(e);message.classList.add("error");button.disabled=false;}}
+async function addStudentToClass(classInfo,input,members){const studentNumber=input.value.trim();const message=members.parentElement.querySelector(".class-message");if(!studentNumber){message.textContent="Enter the student's FEU student number.";message.classList.add("error");return;}try{const userQuery=query(collection(db,"users"),where("studentNumber","==",studentNumber),limit(2));const found=await getDocs(userQuery);if(found.empty){message.textContent="No registered student account found for that student number.";message.classList.add("error");return;}if(found.size>1){message.textContent="More than one account uses this student number. Please ask the administrator to check the student profiles.";message.classList.add("error");return;}const studentDoc=found.docs[0];const profile=studentDoc.data();if(profile.role!=="student"){message.textContent="This student number does not belong to a student account.";message.classList.add("error");return;}await setDoc(doc(db,"classes",classInfo.id,"members",studentDoc.id),{uid:studentDoc.id,email:profile.email,displayName:profile.displayName||[profile.firstName,profile.lastName].filter(Boolean).join(" "),studentNumber:profile.studentNumber||"",addedBy:currentUser.uid,addedAt:serverTimestamp(),status:"active"});input.value="";message.textContent="Student added to the class successfully.";message.classList.remove("error");}catch(e){message.textContent=readableError(e);message.classList.add("error");}}
+$("createClassForm").addEventListener("submit",async event=>{event.preventDefault();if(userProfile?.role!=="teacher")return;const subject=$("classSubject").selectedOptions[0];if(!subject||!subject.value){classMsg("Please select a BSIT subject.",true);return;}const semester=$("classSemester").value;const payload={teacherUid:currentUser.uid,teacherName:userProfile.displayName||currentUser.email,subjectCode:subject.value,subjectName:subject.dataset.name,className:$("className").value.trim(),schoolYear:$("schoolYear").value.trim(),semester,semesterLabel:semester==="1"?"1st Semester":semester==="2"?"2nd Semester":"Summer",program:"BSIT",createdAt:serverTimestamp(),updatedAt:serverTimestamp()};if(!payload.className||!payload.schoolYear){classMsg("Please complete all required class details.",true);return;}try{await addDoc(collection(db,"classes"),payload);$("createClassForm").reset();$("schoolYear").value="2026-2027";classMsg("Class created successfully.");}catch(e){classMsg(readableError(e),true);}});
+
+onAuthStateChanged(auth,async user=>{
+  // Account creation handles its own profile write and sign-out. Ignore the temporary
+  // authenticated state so the profile check cannot race the registration flow.
+  if(signupInProgress && user)return;
+  stopListeners();
+  currentUser=user;
+  if(!user){
+    userProfile=null;
+    $("appScreen").classList.add("hidden");
+    $("authScreen").classList.remove("hidden");
+    setAuthMode(false);
+    ["firstName","middleName","lastName","studentNumber","mobileNumber","yearLevel","section","deliveryMode"].forEach(id=>{if($(id))$(id).value="";});
+    $("email").value="";
+    $("password").value="";
+    authMsg("");
+    return;
+  }
+  try{let snap=await getDoc(doc(db,"users",user.uid));if(!snap.exists()){await new Promise(resolve=>setTimeout(resolve,800));snap=await getDoc(doc(db,"users",user.uid));}if(!snap.exists()){await signOut(auth);authMsg("Your profile is missing. Please create your account again or contact the administrator.",true);return;}userProfile=snap.data();selectedClass=null;if(!["student","teacher"].includes(userProfile.role)){await signOut(auth);authMsg("This account has no valid role. Contact the administrator.",true);return;}$("authScreen").classList.add("hidden");$("appScreen").classList.remove("hidden");$("userLabel").textContent=userProfile.displayName||user.email;$("userAvatar").textContent=(userProfile.displayName||user.email||"U").slice(0,1).toUpperCase();$("rolePill").textContent=userProfile.role==="teacher"?"Teacher":"Student";const teacher=userProfile.role==="teacher";$("teacherPanel").classList.toggle("hidden",!teacher);$("stats").classList.toggle("hidden",!teacher);$("studentPanel").classList.toggle("hidden",teacher);$("studentHistoryPanel").classList.toggle("hidden",teacher);if(teacher){$("studentsNavLabel").textContent="Students";watchAllAttendance();$("classManagementPanel").classList.remove("hidden");initializeSubjectOptions();watchTeacherClasses();}else{$("studentsNavLabel").textContent="My Classes";$("classManagementPanel").classList.add("hidden");watchMyAttendance();watchMyClasses();}setTeacherView(teacher?"dashboard":"students");}catch(e){authMsg(readableError(e),true);}});
+function watchMyClasses(){
+  if(stopMyClassesListener){stopMyClassesListener();stopMyClassesListener=null;}
+  const list=$("studentClassesList");
+  list.replaceChildren();
+  const loading=document.createElement("div");
+  loading.className="empty";
+  loading.textContent="Loading your classes…";
+  list.append(loading);
+
+  const membershipQuery=query(collectionGroup(db,"members"),where("uid","==",currentUser.uid));
+  stopMyClassesListener=onSnapshot(membershipQuery,async memberships=>{
+    const renderVersion=++myClassesRenderVersion;
+    const classIds=[...new Set(memberships.docs.map(memberDoc=>memberDoc.ref.parent.parent?.id).filter(Boolean))];
+
+    if(!classIds.length){
+      list.replaceChildren();
+      const empty=document.createElement("div");
+      empty.className="empty";
+      empty.textContent="You are not enrolled in any classes yet. Please contact your teacher if you think this is a mistake.";
+      list.append(empty);
+      return;
+    }
+
+    try{
+      const classDocs=await Promise.all(classIds.map(id=>getDoc(doc(db,"classes",id))));
+      if(renderVersion!==myClassesRenderVersion)return;
+      const enrolled=classDocs.filter(snap=>snap.exists()).map(snap=>({id:snap.id,...snap.data()}));
+      list.replaceChildren();
+
+      if(!enrolled.length){
+        const empty=document.createElement("div");
+        empty.className="empty";
+        empty.textContent="No class details are currently available.";
+        list.append(empty);
+        return;
+      }
+
+      enrolled.sort((a,b)=>(a.className||"").localeCompare(b.className||""));
+      enrolled.forEach(c=>{
+        const card=document.createElement("article");
+        card.className="class-card";
+        const title=document.createElement("h4");
+        title.textContent=c.className||c.subjectName||"Enrolled class";
+        const meta=document.createElement("div");
+        meta.className="class-meta";
+        meta.style.whiteSpace="pre-line";
+        meta.textContent=`${c.subjectCode||""} • ${c.subjectName||""}\\n${c.schoolYear||""} • ${c.semesterLabel||c.semester||""}`;
+        const status=document.createElement("span");
+        status.className="pill";
+        status.style.display="inline-block";
+        status.style.marginTop="12px";
+        status.textContent="Enrolled";
+        const choose=document.createElement("button");
+        choose.type="button";
+        choose.className="btn-primary";
+        choose.style.marginTop="12px";
+        choose.textContent="Open Class";
+        choose.addEventListener("click",()=>{
+          selectedClass={id:c.id,className:c.className||c.subjectName||"Enrolled class",subjectCode:c.subjectCode||"",subjectName:c.subjectName||"",schoolYear:c.schoolYear||"",semesterLabel:c.semesterLabel||c.semester||""};
+          $("subjectDashboardTitle").textContent=selectedClass.className;
+          $("subjectDashboardMeta").textContent=[selectedClass.subjectCode,selectedClass.subjectName].filter(Boolean).join(" • ");
+          renderSubjectSession();
+          setTeacherView("subject");
+        });
+        card.append(title,meta,status,choose);
+        list.append(card);
+      });
+    }catch(e){
+      if(renderVersion!==myClassesRenderVersion)return;
+      list.replaceChildren();
+      const error=document.createElement("div");
+      error.className="empty error";
+      error.textContent=readableError(e);
+      list.append(error);
+    }
+  },e=>{
+    list.replaceChildren();
+    const error=document.createElement("div");
+    error.className="empty error";
+    error.textContent=readableError(e);
+    list.append(error);
+  });
+}
+$("refreshMyClassesBtn").addEventListener("click",()=>watchMyClasses());
+async function watchMyAttendance(){const q=query(collection(db,"attendance"),where("uid","==",currentUser.uid),limit(30));stopAttendanceListener=onSnapshot(q,snap=>{const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>millis(b.timeInAt)-millis(a.timeInAt));sessionsCache=rows;const open=rows.find(s=>!s.timeOutAt);activeSessionId=open?open.id:null;if(open&&!heartbeatTimer){heartbeatTimer=setInterval(()=>touchSession(open.id).catch(()=>{}),20000);}if(!open&&heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}renderMyRows(rows);if(selectedClass)renderSubjectSession();},e=>studentMsg(readableError(e),true));}
+async function touchSession(id){if(!currentUser||!id)return;await updateDoc(doc(db,"attendance",id),{lastSeenAt:serverTimestamp()});}
+$("subjectTimeInBtn").addEventListener("click",async()=>{if(!currentUser||!selectedClass)return;try{const open=sessionsCache.find(s=>!s.timeOutAt);if(open){studentActionMsg("You already have an active session. Please Time Out before starting another subject.",true);return;}const ref=await addDoc(collection(db,"attendance"),{uid:currentUser.uid,studentName:userProfile.displayName||currentUser.email,studentEmail:currentUser.email,classId:selectedClass.id,className:selectedClass.className,subjectCode:selectedClass.subjectCode,subjectName:selectedClass.subjectName,timeInAt:serverTimestamp(),lastSeenAt:serverTimestamp(),timeOutAt:null});activeSessionId=ref.id;studentActionMsg(`Time In recorded for ${selectedClass.className}.`);if(heartbeatTimer)clearInterval(heartbeatTimer);heartbeatTimer=setInterval(()=>touchSession(ref.id).catch(()=>{}),20000);renderSubjectSession();}catch(e){studentActionMsg(readableError(e),true);}});
+$("subjectTimeOutBtn").addEventListener("click",async()=>{const open=sessionsCache.find(s=>!s.timeOutAt);if(!open||open.classId!==selectedClass?.id){studentActionMsg("There is no active session for this subject.",true);return;}try{await updateDoc(doc(db,"attendance",open.id),{timeOutAt:serverTimestamp(),lastSeenAt:serverTimestamp()});if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}activeSessionId=null;studentActionMsg("Time Out recorded successfully.");renderSubjectSession();}catch(e){studentActionMsg(readableError(e),true);}});
+function studentActionMsg(text,isError=false){$("subjectActionMessage").textContent=text;$("subjectActionMessage").className="message"+(isError?" error":"");}
+function renderSubjectSession(){if(!selectedClass)return;const session=sessionsCache.find(s=>!s.timeOutAt&&s.classId===selectedClass.id);const anyOpen=sessionsCache.find(s=>!s.timeOutAt);$("subjectSessionStatus").textContent=session?(isActive(session)?"Active":"Timed In"):(anyOpen?"Another subject is currently timed in":"Not Timed In");$("subjectSessionDetail").textContent=session?`Time In: ${formatDateTime(session.timeInAt)} • Duration: ${duration(Date.now()-millis(session.timeInAt))}`:anyOpen?`Please Time Out from ${anyOpen.className||"your current subject"} before starting this class.`:"Select Time In when you join this class.";$("subjectTimeInBtn").disabled=!!anyOpen;$("subjectTimeOutBtn").disabled=!session;}
+$("backToClassesBtn").addEventListener("click",()=>setTeacherView("students"));
+
+async function endHeartbeat(){if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}}
+function renderMyRows(rows){const body=$("myTable");body.replaceChildren();rows.forEach(s=>{const tr=document.createElement("tr");[s.className||s.subjectName||"Not recorded",formatDateTime(s.timeInAt),formatDateTime(s.timeOutAt),duration((millis(s.timeOutAt)||Date.now())-millis(s.timeInAt)),s.timeOutAt?"Completed":(isActive(s)?"Active":"Inactive")].forEach((v,i)=>{const td=document.createElement("td");if(i===4){const b=document.createElement("span");b.className="status "+(v==="Active"?"active":"inactive");b.textContent=v;td.append(b);}else td.textContent=v;tr.append(td);});body.append(tr);});$("myEmpty").style.display=rows.length?"none":"block";}
+function watchAllAttendance(){const q=query(collection(db,"attendance"),orderBy("timeInAt","desc"),limit(200));stopAttendanceListener=onSnapshot(q,snap=>{const rows=snap.docs.map(d=>({id:d.id,...d.data()}));sessionsCache=rows;renderTeacherRows(rows);},e=>{const body=$("studentTable");body.replaceChildren();$("emptyState").textContent=readableError(e);$("emptyState").style.display="block";});}
+function renderTeacherRows(rows){const body=$("studentTable");body.replaceChildren();let active=0,inactive=0;rows.forEach(s=>{const online=isActive(s);if(online)active++;else inactive++;const tr=document.createElement("tr");const td1=document.createElement("td"),student=document.createElement("div"),av=document.createElement("div"),name=document.createElement("span");student.className="student";av.className="student-avatar";av.textContent=(s.studentName||s.studentEmail||"?").slice(0,1).toUpperCase();name.textContent=s.studentName||s.studentEmail||"Student";student.append(av,name);td1.append(student);tr.append(td1);const subjectCell=document.createElement("td");subjectCell.textContent=s.className||s.subjectName||"Not recorded";tr.append(subjectCell);[formatTime(s.timeInAt),duration((millis(s.timeOutAt)||Date.now())-millis(s.timeInAt)),formatTime(s.lastSeenAt)].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});const td5=document.createElement("td"),badge=document.createElement("span");badge.className="status "+(online?"active":"inactive");badge.textContent=s.timeOutAt?"Timed out":(online?"Active":"Inactive");td5.append(badge);tr.append(td5);body.append(tr);});$("total").textContent=rows.length;$("activeCount").textContent=active;$("inactiveCount").textContent=inactive;$("emptyState").style.display=rows.length?"none":"block";}
+$("refreshBtn").addEventListener("click",()=>{if(userProfile?.role==="teacher")studentMsg("Attendance updates automatically.");});
+setInterval(()=>{if(userProfile?.role==="teacher")renderTeacherRows(sessionsCache);},5000);
+setAuthMode(false);
+</script>
+</body>
+</html>
